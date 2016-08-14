@@ -25,4 +25,6 @@ public class OffersService {
 	public void create(Offer offer) {
 		offersDao.create(offer);
 	}
+
+	
 }

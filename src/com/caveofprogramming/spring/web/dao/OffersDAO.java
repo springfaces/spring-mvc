@@ -20,67 +20,78 @@ import org.springframework.transaction.annotation.Transactional;
 public class OffersDAO {
 
 	private NamedParameterJdbcTemplate jdbc;
-
+	
 	@Autowired
 	public void setDataSource(DataSource jdbc) {
 		this.jdbc = new NamedParameterJdbcTemplate(jdbc);
 	}
 
-	public List<Offer> getOffer() {
+	public List<Offer> getOffers() {
 
-		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("name", "name");
+		return jdbc.query("select * from offers", new RowMapper<Offer>() {
 
-		return jdbc.query("select * from  offers", new RowMapper<Offer>() {
 			public Offer mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Offer offer = new Offer();
+
 				offer.setId(rs.getInt("id"));
 				offer.setName(rs.getString("name"));
-				offer.setEmail(rs.getString("email"));
 				offer.setText(rs.getString("text"));
+				offer.setEmail(rs.getString("email"));
+
 				return offer;
 			}
+
 		});
-
 	}
-
-	@Transactional()
-	public int[] create(List<Offer> offers) {
-		SqlParameterSource[] source = SqlParameterSourceUtils.createBatch(offers.toArray());
-		return jdbc.batchUpdate("insert into offers (name, email , text) " + "values (:id, :name, :email, :text)",
-				source);
-	}
-
+	
 	public boolean update(Offer offer) {
 		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
-		return jdbc.update("update  offers  set name=:name, text=:text, email=:email where " + "id=:id", params) == 1;
+		
+		return jdbc.update("update offers set name=:name, text=:text, email=:email where id=:id", params) == 1;
 	}
-
+	
 	public boolean create(Offer offer) {
+		
 		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
-		return jdbc.update("insert into offers (name, email , text) " + "values (:name, :email, :text)", params) == 1;
+		
+		return jdbc.update("insert into offers (name, text, email) values (:name, :text, :email)", params) == 1;
 	}
-
+	
+	@Transactional
+	public int[] create(List<Offer> offers) {
+		
+		SqlParameterSource[] params = SqlParameterSourceUtils.createBatch(offers.toArray());
+		
+		return jdbc.batchUpdate("insert into offers (id, name, text, email) values (:id, :name, :text, :email)", params);
+	}
+	
 	public boolean delete(int id) {
 		MapSqlParameterSource params = new MapSqlParameterSource("id", id);
-		return jdbc.update("delete from offers where id= :id", params) == 1;
+		
+		return jdbc.update("delete from offers where id=:id", params) == 1;
 	}
 
 	public Offer getOffer(int id) {
 
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("id", "id");
+		params.addValue("id", id);
 
-		return jdbc.queryForObject("select * from  offers where id =:id", params, new RowMapper<Offer>() {
-			public Offer mapRow(ResultSet rs, int rowNum) throws SQLException {
-				Offer offer = new Offer();
-				offer.setId(rs.getInt("id"));
-				offer.setName(rs.getString("name"));
-				offer.setEmail(rs.getString("email"));
-				offer.setText(rs.getString("text"));
-				return offer;
-			}
-		});
+		return jdbc.queryForObject("select * from offers where id=:id", params,
+				new RowMapper<Offer>() {
 
+					public Offer mapRow(ResultSet rs, int rowNum)
+							throws SQLException {
+						Offer offer = new Offer();
+
+						offer.setId(rs.getInt("id"));
+						offer.setName(rs.getString("name"));
+						offer.setText(rs.getString("text"));
+						offer.setEmail(rs.getString("email"));
+
+						return offer;
+					}
+
+				});
 	}
+	
 }

@@ -7,17 +7,20 @@
 
 
 		<security:authentication-manager>
-		<security:authentication-provider>
-			<security:user-service>
-				<security:user name="John" authorities="admin"
+		<!-- <security:authentication-provider>
+			 <security:user-service>
+				<security:user name="raghu" authorities="admin"
 					password="letmein" />
-				<security:user name="Zog" authorities="zadmin"
+				<security:user name="Mike" authorities="zadmin"
 					password="iamzog" />
 			</security:user-service>
+		</security:authentication-provider> -->
+		<security:authentication-provider>
+			<security:jdbc-user-service data-source-ref="dataSource" />
 		</security:authentication-provider>
-	</security:authentication-manager>
-	
-	<security:http use-expressions="true">
+		</security:authentication-manager>
+
+		<security:http use-expressions="true">
 		<security:intercept-url pattern="/createoffer" access="isAuthenticated()" />
 		<security:intercept-url pattern="/docreate" access="isAuthenticated()" />
 		<security:intercept-url pattern="/offercreated" access="isAuthenticated()" />
@@ -26,6 +29,8 @@
 		<security:intercept-url pattern="/login" access="permitAll" />
 		<security:intercept-url pattern="/offers" access="permitAll" />
 		<security:intercept-url pattern="/**" access="denyAll" />
-		<security:form-login login-page="/login" />
-	</security:http>
+		<security:form-login login-page="/login"
+			authentication-failure-url="/login?error=true" />
+		<security:csrf disabled="true" />
+		</security:http>
 </beans>

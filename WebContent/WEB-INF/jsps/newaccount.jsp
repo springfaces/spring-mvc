@@ -4,7 +4,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
 <link href="${pageContext.request.contextPath}/static/css/main.css"
 	rel="stylesheet" type="text/css" />
 
@@ -12,9 +11,7 @@
 <title>Create New Account</title>
 </head>
 <body>
-
 	<h2>Create New Account</h2>
-
 	<sf:form method="post"
 		action="${pageContext.request.contextPath}/createaccount"
 		commandName="user">
@@ -23,12 +20,18 @@
 			<tr>
 				<td class="label">UserName:</td>
 				<td><sf:input class="control" path="username" name="username"
-						type="text" /><br /> <sf:errors path="username" cssClass="error"></sf:errors></td>
+						type="text" /><br />
+					<div>
+						<sf:errors path="username" cssClass="error"></sf:errors>
+					</div></td>
 			</tr>
 			<tr>
 				<td class="label">Password:</td>
 				<td><sf:input class="control" path="password" name="password"
-						type="text" /><br /> <sf:errors path="password" cssClass="error"></sf:errors></td>
+						type="text" /><br />
+					<div>
+						<sf:errors path="password" cssClass="error"></sf:errors>
+					</div></td>
 			</tr>
 
 			<tr>
@@ -40,12 +43,16 @@
 			<tr>
 				<td class="label">Email:</td>
 				<td><sf:input class="control" path="email" name="email"
-						type="text" /><br /> <sf:errors path="email" cssClass="error"></sf:errors></td>
+						type="text" /><br />
+					<div>
+						<sf:errors path="email" cssClass="error"></sf:errors>
+					</div></td>
 			</tr>
 
 			<tr>
 				<td class="label"></td>
-				<td><input class="control" value="Create New Account" type="submit" /></td>
+				<td><input class="control" value="Create New Account"
+					type="submit" /></td>
 			</tr>
 		</table>
 

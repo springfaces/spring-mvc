@@ -1,19 +1,33 @@
 package com.caveofprogramming.spring.web.dao;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotBlank;
+import com.caveofprogramming.spring.web.validation.ValidEmail;
+
 public class User {
+
+	@NotBlank(message = "Username cannot be blank")
+	@Size(min = 8, max = 15, message = "Username must be between 8 and 15 characters long")
+	@Pattern(regexp = "^\\w{8,}$", message = "Username can only consists of numbers, letters and characters")
 	private String username;
+
+	@NotBlank
+	@Pattern(regexp = "^\\S+$")
+	@Size(min = 8, max = 15, message = "Password must be between 8 and 15 charactes long")
 	private String password;
+
+	@ValidEmail(message = "This does not appear to be a valid email address.")
 	private String email;
+
 	private boolean enabled = false;
 	private String authority;
-	
-	
+
 	public User() {
-		
+
 	}
 
-	public User(String username, String password, String email, boolean enabled,
-			String authority) {
+	public User(String username, String password, String email, boolean enabled, String authority) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
@@ -66,7 +80,5 @@ public class User {
 		return "User [username=" + username + ", password=" + password + ", email=" + email + ", enabled=" + enabled
 				+ ", authority=" + authority + "]";
 	}
-	
-	
 
 }
